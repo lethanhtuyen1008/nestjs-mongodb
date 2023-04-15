@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from 'src/auth/jwt/local-auth.guard';
-import { CreateUserDTO } from './user.request';
 import { User } from './user.schema';
 import { UserService } from './user.service';
 
@@ -18,7 +17,7 @@ export class UserController {
   // @UseGuards(LocalAuthGuard)
   @Post()
   @ApiBody({ description: 'Get all user', type: User })
-  async create(@Body() todo: CreateUserDTO): Promise<User> {
+  async create(@Body() todo: User): Promise<User> {
     return this.todoService.create(todo);
   }
 }
