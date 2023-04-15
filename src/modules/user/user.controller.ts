@@ -1,41 +1,23 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Put,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './user.schema';
+import { User, UserSchema } from './user.schema';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { CreateUserDTO } from './user.request';
 
-@Controller('todo')
+@Controller('user')
+@ApiTags('User')
 export class UserController {
   constructor(private readonly todoService: UserService) {}
 
   @Get()
+  @ApiBody({ description: 'Get all user' })
   async findAll(): Promise<User[]> {
     return this.todoService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<User> {
-    return this.todoService.findOne(id);
-  }
-
   @Post()
-  async create(@Body() todo: User): Promise<User> {
+  @ApiBody({ description: 'Get all user', type: User })
+  async create(@Body() todo: CreateUserDTO): Promise<User> {
     return this.todoService.create(todo);
-  }
-
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() todo: User): Promise<User> {
-    return this.todoService.update(id, todo);
-  }
-
-  @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
-    return this.todoService.delete(id);
   }
 }
