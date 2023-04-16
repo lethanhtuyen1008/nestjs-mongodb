@@ -7,11 +7,11 @@ import { UserService } from './user.service';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private readonly todoService: UserService) {}
+  constructor(private readonly UserService: UserService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
   async findAll(): Promise<User[]> {
-    return this.todoService.findAll();
+    return this.UserService.findAll();
   }
 }
