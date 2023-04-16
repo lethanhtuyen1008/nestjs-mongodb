@@ -7,24 +7,20 @@ export type ProductDocument = HydratedDocument<Product>;
 @Schema()
 export class Product {
   @Prop()
-  @ApiProperty({ default: 'Le Thanh' })
-  firstName: string;
+  @ApiProperty({ default: 'Product 1' })
+  name: string;
 
   @Prop()
-  @ApiProperty({ default: 'Tuyen' })
-  lastName: string;
+  @ApiProperty({ default: 100 })
+  quantity: number;
 
   @Prop()
-  @ApiProperty({ default: '25' })
-  age: number;
+  @ApiProperty({ default: new Date() })
+  create_at: Date;
 
   @Prop()
-  @ApiProperty({ default: 'tuyen@123' })
-  password: string;
-
-  @Prop()
-  @ApiProperty({ default: 'tuyenlt' })
-  username: string;
+  @ApiProperty({ default: new Date() })
+  update_at: Date;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
