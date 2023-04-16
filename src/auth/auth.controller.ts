@@ -1,20 +1,20 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
-  Request,
+  Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from './auth.guard';
+import { User } from 'src/modules/user/user.schema';
 import { AuthService } from './auth.service';
 import { SignInRequest } from './types';
 
-@Controller('auth')
 @ApiTags('Auth')
+@Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -25,9 +25,8 @@ export class AuthController {
     return this.authService.signIn(request.username, request.password);
   }
 
-  @UseGuards(AuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  @Post('signUp')
+  register(@Body() body: User) {
+    return this.authService.createUser(body);
   }
 }
