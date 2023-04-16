@@ -35,7 +35,12 @@ export interface ResponseProductList {
   currentPage: number;
 }
 
-export interface RequestProductList {
+export class RequestProductList {
+  @Prop()
+  @ApiProperty({ default: 0 })
   page: number;
+
+  @Prop()
+  @ApiProperty({ default: 20 })
   pageSize: number;
 }
