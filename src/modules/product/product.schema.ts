@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { HydratedDocument } from 'mongoose';
+import { RequestModelList, ResponseModelList } from 'src/service/base.schema';
 
 export type ProductDocument = HydratedDocument<Product>;
 
@@ -25,18 +26,6 @@ export class Product {
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
 
-export interface ResponseProductList {
-  total: number;
-  data: Product[];
-  currentPage: number;
-}
+export interface ResponseProductList extends ResponseModelList<Product> {}
 
-export class RequestProductList {
-  @Prop()
-  @ApiProperty({ default: 0 })
-  page: number;
-
-  @Prop()
-  @ApiProperty({ default: 20 })
-  pageSize: number;
-}
+export class RequestProductList extends RequestModelList {}
