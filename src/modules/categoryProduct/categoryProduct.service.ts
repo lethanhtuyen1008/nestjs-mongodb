@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import {
   CategoryProduct,
   RequestCategoryProductList,
@@ -17,6 +17,16 @@ export class CategoryProductService {
   async create(request: CategoryProduct): Promise<CategoryProduct> {
     const createdRequest = new this.CategoryProductModel(request);
     return createdRequest.save();
+  }
+
+  async delete(id: string): Promise<{ status: number; message: string }> {
+    const idDelete = new Types.ObjectId(id);
+    await this.CategoryProductModel.findOneAndDelete(idDelete).exec();
+
+    return {
+      status: 200,
+      message: 'success',
+    };
   }
 
   async getList(

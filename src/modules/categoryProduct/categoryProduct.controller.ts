@@ -1,5 +1,13 @@
-import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
-import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   CategoryProduct,
   RequestCategoryProductList,
@@ -7,8 +15,8 @@ import {
 } from './categoryProduct.schema';
 import { CategoryProductService } from './categoryProduct.service';
 
-@ApiTags('Caterogy Product')
-@Controller('caterogy-product')
+@ApiTags('Category Product')
+@Controller('category-product')
 export class CategoryProductController {
   constructor(
     private readonly CategoryProductService: CategoryProductService,
@@ -30,5 +38,13 @@ export class CategoryProductController {
     @Body() request: CategoryProduct,
   ): Promise<CategoryProduct> {
     return this.CategoryProductService.create(request);
+  }
+
+  @Delete(':id')
+  @ApiParam({ name: 'id' })
+  async deleteCategoryProduct(
+    @Param() id: string,
+  ): Promise<{ status: number; message: string }> {
+    return this.CategoryProductService.delete(id);
   }
 }

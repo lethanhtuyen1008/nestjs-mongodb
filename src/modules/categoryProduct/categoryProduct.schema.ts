@@ -7,14 +7,12 @@ export type CategoryProductDocument = HydratedDocument<CategoryProduct>;
 @Schema()
 export class CategoryProduct {
   @Prop()
-  @ApiProperty({ default: 'Product 1' })
+  @ApiProperty({ default: 'Category product name' })
   name: string;
 
-  @Prop()
   @ApiProperty({ default: new Date() })
   create_at: Date;
 
-  @Prop()
   @ApiProperty({ default: new Date() })
   update_at: Date;
 }

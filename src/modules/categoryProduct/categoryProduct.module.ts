@@ -10,7 +10,11 @@ import {
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: CategoryProduct.name, schema: CategoryProductSchema },
+      {
+        name: CategoryProduct.name,
+        schema: CategoryProductSchema,
+        collection: 'category_products',
+      },
     ]),
   ],
   controllers: [CategoryProductController],
