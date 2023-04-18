@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   Product,
   RequestProductList,
@@ -19,7 +19,6 @@ export class ProductController {
   async getList(
     @Query() request: RequestProductList,
   ): Promise<ResponseProductList> {
-    console.log(request);
     return this.ProductService.getList(request);
   }
 
