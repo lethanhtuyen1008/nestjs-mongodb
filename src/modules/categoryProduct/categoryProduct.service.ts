@@ -20,8 +20,26 @@ export class CategoryProductService {
   }
 
   async delete(id: string): Promise<{ status: number; message: string }> {
-    const idDelete = new Types.ObjectId(id);
-    await this.CategoryProductModel.findOneAndDelete(idDelete).exec();
+    const objectId = new Types.ObjectId(id);
+
+    await this.CategoryProductModel.findOneAndDelete(objectId).exec();
+
+    return {
+      status: 200,
+      message: 'success',
+    };
+  }
+
+  async update(
+    id: string,
+    updateValue: CategoryProduct,
+  ): Promise<{ status: number; message: string }> {
+    const objectId = new Types.ObjectId(id);
+
+    await this.CategoryProductModel.findByIdAndUpdate(
+      objectId,
+      updateValue,
+    ).exec();
 
     return {
       status: 200,

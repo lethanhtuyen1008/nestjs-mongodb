@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -46,5 +47,15 @@ export class CategoryProductController {
     @Param() id: string,
   ): Promise<{ status: number; message: string }> {
     return this.CategoryProductService.delete(id);
+  }
+
+  @Put(':id')
+  @ApiParam({ name: 'id' })
+  @ApiBody({ type: CategoryProduct })
+  async updateCategoryProduct(
+    @Param() id: string,
+    @Body() updateValue: CategoryProduct,
+  ): Promise<{ status: number; message: string }> {
+    return this.CategoryProductService.update(id, updateValue);
   }
 }
