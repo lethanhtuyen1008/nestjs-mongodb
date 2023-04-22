@@ -8,7 +8,7 @@ import { CategoryProduct } from './categoryProduct.schema';
 export class CategoryProductService extends BaseService<CategoryProduct> {
   constructor(
     @InjectModel(CategoryProduct.name)
-    private CategoryProductModel: Model<CategoryProduct>,
+    CategoryProductModel: Model<CategoryProduct>,
   ) {
     super(CategoryProductModel);
   }

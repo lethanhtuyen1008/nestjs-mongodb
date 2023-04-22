@@ -6,7 +6,7 @@ import { Product } from './product.schema';
 
 @Injectable()
 export class ProductService extends BaseService<Product> {
-  constructor(@InjectModel(Product.name) private ProductModel: Model<Product>) {
+  constructor(@InjectModel(Product.name) ProductModel: Model<Product>) {
     super(ProductModel);
   }
 }

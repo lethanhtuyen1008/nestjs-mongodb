@@ -59,4 +59,12 @@ export abstract class BaseService<T> {
       data,
     };
   }
+
+  async findAll(): Promise<T[]> {
+    return this.model.find().exec();
+  }
+
+  async findOne(username: string): Promise<T | undefined> {
+    return this.model.findOne({ username });
+  }
 }
