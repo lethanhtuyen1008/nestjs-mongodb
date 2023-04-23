@@ -1,5 +1,14 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ResponeModelDelete } from 'src/service/base.schema';
 import {
   Product,
   RequestProductList,
@@ -26,5 +35,11 @@ export class ProductController {
   @ApiBody({ type: Product })
   async createProduct(@Body() request: Product): Promise<Product> {
     return this.ProductService.create(request);
+  }
+
+  @Delete()
+  @ApiParam({ name: 'id', type: 'string' })
+  async deleteProduct(@Param() id: string): Promise<ResponeModelDelete> {
+    return this.ProductService.delete(id);
   }
 }

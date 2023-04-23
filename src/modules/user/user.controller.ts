@@ -1,6 +1,5 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { ApiBasicAuth, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt/local-auth.guard';
+import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { User } from './user.schema';
 import { UserService } from './user.service';
 
@@ -10,7 +9,6 @@ export class UserController {
   constructor(private readonly UserService: UserService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   async findAll(): Promise<User[]> {
     return this.UserService.findAll();
   }

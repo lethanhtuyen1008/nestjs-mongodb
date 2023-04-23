@@ -16,3 +16,8 @@ export class RequestModelList {
   @ApiProperty({ default: 20 })
   pageSize: number;
 }
+
+export class ResponeModelDelete {
+  status: number;
+  message: string;
+}

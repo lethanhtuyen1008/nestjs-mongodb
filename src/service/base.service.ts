@@ -1,5 +1,9 @@
 import { Model, Types } from 'mongoose';
-import { RequestModelList, ResponseModelList } from './base.schema';
+import {
+  RequestModelList,
+  ResponeModelDelete,
+  ResponseModelList,
+} from './base.schema';
 
 export abstract class BaseService<T> {
   protected model: Model<T>;
@@ -17,7 +21,7 @@ export abstract class BaseService<T> {
     return createdRequest.save();
   }
 
-  async delete(id: string): Promise<{ status: number; message: string }> {
+  async delete(id: string): Promise<ResponeModelDelete> {
     const objectId = new Types.ObjectId(id);
 
     await this.model.findOneAndDelete(objectId).exec();

@@ -1,70 +1,65 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserService } from '../modules/user/user.service';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from './auth.constants';
-import { validate } from 'class-validator';
-import * as bcrypt from 'bcrypt';
-import { LoggerService } from 'src/logger/logger.service';
 import { User } from 'src/modules/user/user.schema';
+import { UserService } from 'src/modules/user/user.service';
+
+import type { JwtPayload, JwtSign, Payload } from './auth.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UserService,
-    private jwtService: JwtService,
-    private logger: LoggerService,
+    private jwt: JwtService,
+    private user: UserService,
+    private config: ConfigService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
-    if (user) {
-      const { ...result } = user;
-      return result;
+  public async validateUser(
+    username: string,
+    password: string,
+  ): Promise<User | null> {
+    const user = await this.user.findOne(username);
+
+    if (user.password === password) {
+      return user;
     }
+
     return null;
   }
 
-  async signIn(username, password): Promise<Record<string, any>> {
-    let isOk = false;
-
-    await validate({ username, password }).then((errors) => {
-      if (errors.length > 0) {
-        this.logger.debug(`${errors}`, AuthService.name);
-      } else {
-        isOk = true;
-      }
-    });
-
-    if (isOk) {
-      const userDetails = await this.usersService.findOne(username);
-
-      if (userDetails == null) {
-        return { status: 401, msg: { msg: 'Invalid credentials' } };
-      }
-
-      const isValid = bcrypt.compareSync(password, userDetails.password);
-      if (isValid) {
-        const payload = { username };
-
-        return {
-          status: 200,
-          access_token: await this.jwtService.signAsync(payload, {
-            expiresIn: '2h',
-            secret: jwtConstants.secret,
-          }),
-        };
-      } else {
-        return { status: 401, msg: { msg: 'Invalid credentials' } };
-      }
-    } else {
-      return { status: 400, msg: { msg: 'Invalid fields.' } };
+  public validateRefreshToken(data: Payload, refreshToken: string): boolean {
+    if (
+      !this.jwt.verify(refreshToken, {
+        secret: this.config.get('jwtRefreshSecret'),
+      })
+    ) {
+      return false;
     }
+
+    const payload = <{ sub: string }>this.jwt.decode(refreshToken);
+    return payload.sub === data.userId;
   }
 
-  async createUser(body: User): Promise<Record<string, any>> {
-    return this.usersService.create({
-      ...body,
-      password: bcrypt.hashSync(body.password, 10),
-    });
+  public jwtSign(data: Payload): JwtSign {
+    const payload: JwtPayload = {
+      sub: data.userId,
+      username: data.username,
+      roles: data.roles,
+    };
+
+    return {
+      access_token: this.jwt.sign(payload),
+      refresh_token: this.getRefreshToken(payload.sub),
+    };
+  }
+
+  private getRefreshToken(sub: string): string {
+    return this.jwt.sign(
+      { sub },
+      {
+        secret: this.config.get('jwtRefreshSecret'),
+        expiresIn: '7d', // Set greater than the expiresIn of the access_token
+      },
+    );
   }
 }
